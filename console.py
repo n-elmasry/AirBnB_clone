@@ -31,9 +31,10 @@ class HBNBCommand(cmd.Cmd):
     # task 7 starts here
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it and prints the id"""
-        if len(args) < 2:
+        arguments = args.split()
+        if len(arguments) < 2:
             print('** class name missing **')
-        elif args[1] != 'BaseModel':
+        elif arguments[1] != 'BaseModel':
             print("** class doesn't exist **")
         else:
             new_instance = BaseModel()
@@ -59,14 +60,15 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id"""
-        if len(args) < 2:
+        arguments = args.split()
+        if len(arguments) < 2:
             print('** class name missing **')
-        elif args[2] != 'BaseModel':
+        elif arguments[2] != 'BaseModel':
             print("** class doesn't exist **")
-        elif len(args) < 3:
+        elif len(arguments) < 3:
             print('** instance id missing **')
         else:
-            key = "{}.{}".format(args[2], args[3])
+            key = "{}.{}".format(arguments[2], arguments[3])
             instances = models.file_storage.all()
 
             if key not in instances:
