@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """ entry point of the command interpreter """
 import cmd
-import models
+import models.base_model import BaseModel
+from models import storage
 import sys
 
 
@@ -31,10 +32,9 @@ class HBNBCommand(cmd.Cmd):
     # task 7 starts here
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it and prints the id"""
-        arguments = args.split()
-        if len(arguments) < 2:
+        if not args:
             print('** class name missing **')
-        elif arguments[1] != 'BaseModel':
+        elif args != 'BaseModel':
             print("** class doesn't exist **")
         else:
             new_instance = BaseModel()
@@ -43,14 +43,15 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         """Prints str representation of instance based on class name and id"""
-        if len(args) < 2:
+        if not args:
             print('** class name missing **')
-        elif args[1] != 'BaseModel':
+        elif args != 'BaseModel':
             print("** class doesn't exist **")
-        elif len(args) < 3:
+        elif len(args.split()) < 3:
             print('** instance id missing **')
         else:
-            key = "{}.{}".format(args[1], args[2])
+            class_name, instance_id = args.split()[1], args.split()[2]
+            key = "{}.{}".format(class_name, instance_id)
             instances = models.file_storage.all()
 
             if key not in instances:
@@ -60,22 +61,22 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id"""
-        arguments = args.split()
-        if len(arguments) < 2:
+        if not args:
             print('** class name missing **')
-        elif arguments[2] != 'BaseModel':
+        elif args != 'BaseModel':
             print("** class doesn't exist **")
-        elif len(arguments) < 3:
+        elif len(args.split()) < 3:
             print('** instance id missing **')
         else:
+            class_name, instance_id = args.split()[1], args.split()[2]
             key = "{}.{}".format(arguments[2], arguments[3])
-            instances = models.file_storage.all()
+            instances = storage.all()
 
             if key not in instances:
                 print('** no instance found **')
             else:
                 del instances[key]
-                models.file_storage.save()
+                storage.save()
 
     def do_all(self, args):
         """Prints all string representation of all instances"""
@@ -83,7 +84,7 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         instances = storage.all()
 
-        if len(args) < 3 or args[2] == 'BaseModel':
+        if not args or args == 'BaseModel':
             for instance in instances.values():
                 print(instance)
         else:
