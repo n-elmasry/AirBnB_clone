@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 '''FileStorage serializes instances and deserializes JSON file to instances'''
 import json
+from models.base_model import BaseModel
+from models.user import User
 from os.path import isfile
 
 
@@ -8,6 +10,11 @@ class FileStorage:
     """serializes instances and deserializes JSON file to instance"""
     __file_path = "file.json"
     __objects = {}
+
+    classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+    }
 
     def __init__(self):
         """__init__"""

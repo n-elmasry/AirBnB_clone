@@ -3,6 +3,7 @@
 import cmd
 import models.base_model import BaseModel
 from models import storage
+from models.user import User
 import sys
 
 
@@ -34,10 +35,10 @@ class HBNBCommand(cmd.Cmd):
         """Creates a new instance of BaseModel, saves it and prints the id"""
         if not args:
             print('** class name missing **')
-        elif args != 'BaseModel':
+        elif args not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
         else:
-            new_instance = BaseModel()
+            new_instance = blobals()[args]()
             new_instance.save()
             print(new_instance.id)
 
@@ -45,14 +46,14 @@ class HBNBCommand(cmd.Cmd):
         """Prints str representation of instance based on class name and id"""
         if not args:
             print('** class name missing **')
-        elif args != 'BaseModel':
+        elif args.split()[0] not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
         elif len(args.split()) < 3:
             print('** instance id missing **')
         else:
-            class_name, instance_id = args.split()[1], args.split()[2]
+            class_name, instance_id = args.split()[0], args.split()[1]
             key = "{}.{}".format(class_name, instance_id)
-            instances = models.file_storage.all()
+            instances = storage.all()
 
             if key not in instances:
                 print('** no instance found **')
@@ -63,13 +64,13 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance based on the class name and id"""
         if not args:
             print('** class name missing **')
-        elif args != 'BaseModel':
+        elif args.split()[0] not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
         elif len(args.split()) < 3:
             print('** instance id missing **')
         else:
-            class_name, instance_id = args.split()[1], args.split()[2]
-            key = "{}.{}".format(arguments[2], arguments[3])
+            class_name, instance_id = args.split()[0], args.split()[1]
+            key = "{}.{}".format(class_name, instance_id)
             instances = storage.all()
 
             if key not in instances:
@@ -84,7 +85,7 @@ class HBNBCommand(cmd.Cmd):
         storage.reload()
         instances = storage.all()
 
-        if not args or args == 'BaseModel':
+        if not args or args == 'BaseModel' or args == 'User':
             for instance in instances.values():
                 print(instance)
         else:
