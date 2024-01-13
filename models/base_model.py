@@ -7,7 +7,7 @@ import models
 
 class BaseModel:
     """Class BaseModel"""
-    
+
     def __init__(self, *args, **kwargs):
         '''Re-create an instance with this dictionary representatioin'''
         # instance attribute
@@ -28,11 +28,8 @@ class BaseModel:
         models.storage.new(self)
         models.storage.save()
 
-
-   # override function
-
     def __str__(self):
-        #return f"{type(self).__name__} {self.to_dict()}"
+        # return f"{type(self).__name__} {self.to_dict()}"
         return f'[{self.__class__.__name__}] ({self.id}) {self.__dict__}'
 
     # Public instance methods
@@ -52,4 +49,3 @@ class BaseModel:
             '__class__': self.__class__.__name__,
         }
         return new_dict
-

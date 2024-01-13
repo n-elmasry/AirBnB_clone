@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-'''FileStorage that serializes instances to a JSON file and deserializes JSON file to instances'''
+'''FileStorage serializes instances and deserializes JSON file to instances'''
 import json
 from os.path import isfile
 
 
 class FileStorage:
-    """serializes instances to a JSON file and deserializes JSON file to instances"""
+    """serializes instances and deserializes JSON file to instance"""
     __file_path = "file.json"
     __objects = {}
 
@@ -41,8 +41,9 @@ class FileStorage:
                 file_content = f.read()
                 dict_obj = json.loads(file_content)
                 for key, value in dict_obj.items():
-                    cls_name = value['__class__']
-                    cls = getattr(__import__('models.' + cls_name, fromlist=[cls_name]), cls_name)
+                    cls_n = value['__class__']
+                    lst = fromlist=[cls_name]
+                    cls = getattr(__import__('models.' + cls_name, lst), cls_n)
                     try:
                         instance = cls(**value)
                         self.__objects[key] = instance
@@ -52,8 +53,6 @@ class FileStorage:
             print(f"Error loading file: {e}")
 
         """
-
-
 
     def reload(self):
         """deserializes the JSON file to __objects"""
@@ -69,4 +68,3 @@ class FileStorage:
                         FileStorage.__objects[key] = instance
                 except Exception:
                     pass
-
