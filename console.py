@@ -81,7 +81,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """Prints all string representation of all instances"""
-        from models import storage
         storage.reload()
         instances = storage.all()
 
@@ -98,4 +97,9 @@ HBNBCommand().cmdloop()
 
 
 if __name__ == '__main__':
-    HBNBCommand().cmdloop()
+    cmd = HBNBCommand()
+    if not sys.stdin.isatty():
+        for line in sys.stdin:
+            HBNBCommand.onecmd(line.strip())
+    else:
+        HBNBCommand().cmdloop()
