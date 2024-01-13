@@ -49,33 +49,39 @@ class HBNBCommand(cmd.Cmd):
     # task 7 starts here
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it and prints the id"""
-        if not args:
+        if len(args) < 2:
             print('** class name missing **')
-        elif args not in HBNBCommand.FileStorage.classes:
+        elif args[1] not in storage.classes:
             print("** class doesn't exist **")
         else:
-            new_instance = FileStorage.classes[args]()
+            new_instance = storage.classes[args[1]]()
             new_instance.save()
             print(new_instance.id)
 
-    def do_show(self, args):
+    def do_show(self, line):
         """Prints str representation of instance based on class name and id"""
-        if not args:
+        arguments = line.split()
+        if len(arguments) == 0:
             print('** class name missing **')
-        else:
-            arguments = args.split()
-            if arguments[0] not in HBNBCommand.FileStorage.classes:
-                print("** class doesn't exist **")
-            elif len(arguments) < 2:
-                print('** instance id missing **')
-            else:
-                key = "{}.{}".format(arguments[0], arguments[1])
-                instances = storage.all()
+            return
 
-                if key not in instances:
-                    print('** no instance found **')
-                else:
-                    print(instances[key])
+        class_name = arguments[0]
+        if class_name not in storage.classes:
+                print("** class doesn't exist **")
+                return
+
+        if len(arguments) < 2:
+            print('** instance id missing **')
+            return
+
+        instance_id = arguments[1]
+        key = "{}.{}".format(class_name, instance_id)
+
+        instances = storage.all()
+        if key not in instances:
+            print('** no instance found **')
+        else:
+            print(instances[key])
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id"""
