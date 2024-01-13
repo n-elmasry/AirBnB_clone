@@ -70,8 +70,12 @@ class FileStorage:
                     dict_obj = json.loads(file_content)
                     for key, values in dict_obj.items():
                         cls_name, obj_id = key.split('.')
-                        cls = getattr(models, cls_name)
-                        instance = cls(**values)
-                        FileStorage.__objects[key] = instance
+                        #cls = getattr(models, cls_name)
+                        #instance = cls(**values)
+                        #FileStorage.__objects[key] = instance
+                        cls = self.classes.get(cls_name)
+                        if cls:
+                            instance = cls(**values)
+                            FileStorage.__objects[key] = instance
                 except Exception:
                     pass
