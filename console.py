@@ -5,12 +5,15 @@ from models.base_model import BaseModel
 from models import storage
 from models.user import User
 import sys
+from shlex import split
 
 
 class HBNBCommand(cmd.Cmd):
     """class HBNBCommand """
 
     prompt = "(hbnb) "
+    classes = ['BaseModel', 'User']
+
 
     # handling quit
     def do_quit(self, args):
@@ -35,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
         """Creates a new instance of BaseModel, saves it and prints the id"""
         if not args:
             print('** class name missing **')
-        elif args not in ['BaseModel', 'User']:
+        elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
         else:
             new_instance = globals()[args]()
@@ -46,9 +49,9 @@ class HBNBCommand(cmd.Cmd):
         """Prints str representation of instance based on class name and id"""
         if not args:
             print('** class name missing **')
-        elif args.split()[0] not in ['BaseModel', 'User']:
+        elif args.split()[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        elif len(args.split()) < 3:
+        elif len(args.split()) < 2:
             print('** instance id missing **')
         else:
             class_name, instance_id = args.split()[0], args.split()[1]
@@ -64,7 +67,7 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance based on the class name and id"""
         if not args:
             print('** class name missing **')
-        elif args.split()[0] not in ['BaseModel', 'User']:
+        elif args.split()[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args.split()) < 3:
             print('** instance id missing **')
@@ -86,7 +89,7 @@ class HBNBCommand(cmd.Cmd):
 
         if not args or args == 'BaseModel' or args == 'User':
             for instance in instances.values():
-                print(instance)
+                print(instance.__str__())
         else:
             print("** class doesn't exist **")
 
