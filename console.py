@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ entry point of the command interpreter """
 import cmd
-import models.base_model import BaseModel
+from models.base_model import BaseModel
 from models import storage
 from models.user import User
 import sys
@@ -38,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
         elif args not in ['BaseModel', 'User']:
             print("** class doesn't exist **")
         else:
-            new_instance = blobals()[args]()
+            new_instance = globals()[args]()
             new_instance.save()
             print(new_instance.id)
 
