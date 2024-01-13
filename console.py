@@ -26,6 +26,10 @@ class HBNBCommand(cmd.Cmd):
         """Exit the program on EOF (Ctrl+D)"""
         print()
         sys.exit()
+    
+    def do_help(self, args):
+        """help"""
+        cmd.Cmd.do_help(self, args)
 
     # an empty line + ENTER shouldn’t execute anything
     def emptyline(self):
@@ -95,13 +99,13 @@ class HBNBCommand(cmd.Cmd):
             # task 7 ends here
 
 
-HBNBCommand().cmdloop()
+#HBNBCommand().cmdloop()
 
 
 if __name__ == '__main__':
-    cmd = HBNBCommand()
-    if not sys.stdin.isatty():
-        for line in sys.stdin:
-            HBNBCommand.onecmd(line.strip())
-    else:
-        HBNBCommand().cmdloop()
+#    cmd = HBNBCommand()
+#    if not sys.stdin.isatty():
+#        for line in sys.stdin:
+#            HBNBCommand.onecmd(line.strip())
+#    else:
+    HBNBCommand().cmdloop()
