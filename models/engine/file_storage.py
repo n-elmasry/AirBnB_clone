@@ -11,11 +11,6 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    classes = {
-            "BaseModel": BaseModel,
-            "User": User,
-    }
-
     def __init__(self):
         """__init__"""
         pass
@@ -79,3 +74,20 @@ class FileStorage:
                             FileStorage.__objects[key] = instance
                 except Exception:
                     pass
+
+    def delete(self, obj=None):
+        '''Delete obj if it is in __objects'''
+        if obj:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            FileStorage.__objects.pop(key, None)
+
+
+FileStorage.classes = {
+        'BaseModel': BaseModel,
+        'User': User,
+        'State': State,
+        'City': City,
+        'Amenity': Amenity,
+        'Place': Place,
+        'Review': Review
+}
