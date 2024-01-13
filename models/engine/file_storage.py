@@ -3,6 +3,11 @@
 import json
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from os.path import isfile
 
 
@@ -33,28 +38,6 @@ class FileStorage:
             dict_obj[obj_key] = obj_value.to_dict()
         with open(self.__file_path, "w", encoding="utf-8") as f:
             json.dump(dict_obj, f)
-    """
-   def reload(self):
-    if not isfile(self.__file_path):
-        return False
-    else:
-        try:
-            with open(self.__file_path, 'r', encoding='utf-8') as f:
-                file_content = f.read()
-                dict_obj = json.loads(file_content)
-                for key, value in dict_obj.items():
-                    cls_n = value['__class__']
-                    lst = fromlist=[cls_name]
-                    cls = getattr(__import__('models.' + cls_name, lst), cls_n)
-                    try:
-                        instance = cls(**value)
-                        self.__objects[key] = instance
-                    except Exception:
-                        pass
-        except Exception as e:
-            print(f"Error loading file: {e}")
-
-        """
 
     def reload(self):
         """deserializes the JSON file to __objects"""

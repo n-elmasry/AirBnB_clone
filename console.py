@@ -2,8 +2,14 @@
 """ entry point of the command interpreter """
 import cmd
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 from models import storage
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import sys
 from shlex import split
 
@@ -12,6 +18,11 @@ class HBNBCommand(cmd.Cmd):
     """class HBNBCommand """
 
     prompt = "(hbnb) "
+
+    def __init__(self, *args, **kwargs):
+        '''Initialization'''
+        super().__init__(*args, **kwargs)
+        self.file_storage = FileStorage()
 
     # handling quit
     def do_quit(self, args):
@@ -40,7 +51,7 @@ class HBNBCommand(cmd.Cmd):
         """Creates a new instance of BaseModel, saves it and prints the id"""
         if not args:
             print('** class name missing **')
-        elif args not in FileStorage.classes:
+        elif args not in HBNBCommand.FileStorage.classes:
             print("** class doesn't exist **")
         else:
             new_instance = FileStorage.classes[args]()
@@ -53,7 +64,7 @@ class HBNBCommand(cmd.Cmd):
             print('** class name missing **')
         else:
             arguments = args.split()
-            if arguments[0] not in FileStorage.classes:
+            if arguments[0] not in HBNBCommand.FileStorage.classes:
                 print("** class doesn't exist **")
             elif len(arguments) < 2:
                 print('** instance id missing **')
@@ -72,7 +83,7 @@ class HBNBCommand(cmd.Cmd):
             print('** class name missing **')
         else:
             arguments = args.split()
-            if arguments[0] not in FileStorage.classes:
+            if arguments[0] not in HBNBCommand.FileStorage.classes:
                 print("** class doesn't exist **")
             elif len(arguments) < 2:
                 print('** instance id missing **')
@@ -88,12 +99,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """Prints all string representation of all instances"""
+        from models import storage
         storage.reload()
         instances = storage.all()
 
-        if not args or args in FileStorage.classes:
+        if not args or args in storage.classes:
             for instance in instances.values():
-                print(instance.__str__())
+                print(instance)
         else:
             print("** class doesn't exist **")
 
