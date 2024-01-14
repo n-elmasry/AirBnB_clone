@@ -18,6 +18,7 @@ class HBNBCommand(cmd.Cmd):
     """class HBNBCommand """
 
     prompt = "(hbnb) "
+    clsz = ['BaseModel', 'User', 'State', 'City', 'Amenity', 'Place', 'Review']
 
     def __init__(self, *args, **kwargs):
         '''Initialization'''
@@ -49,73 +50,90 @@ class HBNBCommand(cmd.Cmd):
     # task 7 starts here
     def do_create(self, args):
         """Creates a new instance of BaseModel, saves it and prints the id"""
-        if len(args) < 2:
+        if not args:
             print('** class name missing **')
-        elif args[1] not in storage.classes:
+        elif args not in self.clsz:
             print("** class doesn't exist **")
         else:
-            new_instance = storage.classes[args[1]]()
+            new_instance = globals()[args]()
             new_instance.save()
             print(new_instance.id)
 
-    def do_show(self, line):
+    def do_show(self, args):
         """Prints str representation of instance based on class name and id"""
-        arguments = line.split()
-        if len(arguments) == 0:
+        if not args:
             print('** class name missing **')
-            return
-
-        class_name = arguments[0]
-        if class_name not in storage.classes:
-                print("** class doesn't exist **")
-                return
-
-        if len(arguments) < 2:
+        elif args.split()[0] not in HBNBCommand.clsz:
+            print("** class doesn't exist **")
+        if len(args.split()) < 2:
             print('** instance id missing **')
-            return
-
-        instance_id = arguments[1]
-        key = "{}.{}".format(class_name, instance_id)
-
-        instances = storage.all()
-        if key not in instances:
-            print('** no instance found **')
         else:
-            print(instances[key])
+            class_name, instance_id = args.split()[0], args.split()[1]
+            key = "{}.{}".format(class_name, instance_id)
+            instances = storage.all()
+
+            if key not in instances:
+                print('** no instance found **')
+            else:
+                print(instances[key])
 
     def do_destroy(self, args):
         """Deletes an instance based on the class name and id"""
         if not args:
             print('** class name missing **')
+        elif args.split()[0].lower() not in self.clsz:
+            print("** class doesn't exist **")
+        elif len(args.split()) < 3:
+            print('** instance id missing **')
         else:
-            arguments = args.split()
-            if arguments[0] not in HBNBCommand.FileStorage.classes:
-                print("** class doesn't exist **")
-            elif len(arguments) < 2:
-                print('** instance id missing **')
-            else:
-                key = "{}.{}".format(arguments[0], arguments[1])
-                instances = storage.all()
+            class_name, instance_id = args.split()[0], args.split()[1]
+            key = "{}.{}".format(arguments[0], arguments[1])
+            instances = storage.all()
 
-                if key not in instances:
-                    print('** no instance found **')
-                else:
-                    del instances[key]
-                    storage.save()
+            if key not in instances:
+                print('** no instance found **')
+            else:
+                del instances[key]
+                storage.save()
 
     def do_all(self, args):
         """Prints all string representation of all instances"""
-        from models import storage
         storage.reload()
         instances = storage.all()
 
-        if not args or args in storage.classes:
+        if not args or args.lower() == 'basemodel':
             for instance in instances.values():
-                print(instance)
+                print(instance.__str__())
+        elif args.lower() in HBNBCommand.clsz:
+            for key, instance in instances.items():
+                class_name = key.split('.')[0]
+                if class_name == args.lower():
+                    print(instance.__str__())
         else:
             print("** class doesn't exist **")
 
             # task 7 ends here
+    def do_update(self, args):
+        '''Update Console instance'''
+        if not args:
+            print('** class name missing **')
+        else:
+            if split(args)[0] not in self.clsz:
+                print("** class doesn't exist **")
+            elif len(split(args)) < 2:
+                print('** instance id missing **')
+            else:
+                key = "{}.{}".format(split(args)[0], split(args)[1])
+                instances = storage.all()
+                if key not in instances:
+                    print('** no instance found **')
+                elif len(split(args)) < 3:
+                    print('** attribute name missing **')
+                elif len(split(args)) < 4:
+                    print('** value missing **')
+                else:
+                    setattr(instances[key], split(args)[2], split(args)[3])
+                    instances[key].save()
 
 
 # HBNBCommand().cmdloop()
