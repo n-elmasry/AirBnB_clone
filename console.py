@@ -81,13 +81,13 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance based on the class name and id"""
         if not args:
             print('** class name missing **')
-        elif args.split()[0].lower() not in self.clsz:
+        elif args.split()[0] not in HBNBCommand.clsz:
             print("** class doesn't exist **")
-        elif len(args.split()) < 3:
+        elif len(args.split()) < 2:
             print('** instance id missing **')
         else:
             class_name, instance_id = args.split()[0], args.split()[1]
-            key = "{}.{}".format(arguments[0], arguments[1])
+            key = "{}.{}".format(args.split()[0], args.split()[1])
             instances = storage.all()
 
             if key not in instances:
@@ -95,9 +95,8 @@ class HBNBCommand(cmd.Cmd):
             else:
                 del instances[key]
                 storage.save()
-
+    """
     def do_all(self, args):
-        """Prints all string representation of all instances"""
         storage.reload()
         instances = storage.all()
 
@@ -109,6 +108,22 @@ class HBNBCommand(cmd.Cmd):
                 class_name = key.split('.')[0]
                 if class_name == args.lower():
                     print(instance.__str__())
+        else:
+            print("** class doesn't exist **")
+    """
+    def do_all(self, args):
+        """Prints all string representation of all instances"""
+        storage.reload()
+        instances = storage.all()
+
+        if not args or args.lower() == 'basemodel':
+            result = [instance.__str__() for instance in instances.values()]
+            print(result)
+        elif args.lower() in HBNBCommand.clsz:
+            result = [
+                instance.__str__() for key, instance in instances.items() if key.split('.')[0] == args.lower()
+            ]
+            print(result)
         else:
             print("** class doesn't exist **")
 
