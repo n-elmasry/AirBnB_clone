@@ -55,15 +55,15 @@ class HBNBCommand(cmd.Cmd):
         elif args not in HBNBCommand.clsz:
             print("** class doesn't exist **")
         else:
-            """
+
             new_instance = globals()[args]()
             new_instance.save()
             print(new_instance.id)
-            """
-            new_instance = eval(args.split()[0] + '()')
-            if isinstance(new_instance, BaseModel):
-                new_instance.save()
-                print(new_instance.id)
+
+           # new_instance = eval(args.split()[0] + '()')
+           # if isinstance(new_instance, BaseModel):
+           #     new_instance.save()
+           #     print(new_instance.id)
 
     def do_show(self, args):
         """Prints str representation of instance based on class name and id"""
@@ -101,22 +101,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 del instances[key]
                 storage.save()
-    """
-    def do_all(self, args):
-        storage.reload()
-        instances = storage.all()
 
-        if not args or args.lower() == 'basemodel':
-            for instance in instances.values():
-                print(instance.__str__())
-        elif args.lower() in HBNBCommand.clsz:
-            for key, instance in instances.items():
-                class_name = key.split('.')[0]
-                if class_name == args.lower():
-                    print(instance.__str__())
-        else:
-            print("** class doesn't exist **")
-    """
     def do_all(self, args):
         """Prints all string representation of all instances"""
         storage.reload()
@@ -160,13 +145,5 @@ class HBNBCommand(cmd.Cmd):
                     instances[key].save()
 
 
-# HBNBCommand().cmdloop()
-
-
 if __name__ == '__main__':
-    # cmd = HBNBCommand()
-    # if not sys.stdin.isatty():
-    # for line in sys.stdin:
-    # HBNBCommand.onecmd(line.strip())
-    # else:
     HBNBCommand().cmdloop()
