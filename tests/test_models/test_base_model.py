@@ -164,7 +164,7 @@ class TestBaseModel_to_dict(unittest.TestCase):
         bm_dict = bm.to_dict()
         self.assertEqual(str, type(bm_dict["created_at"]))
         self.assertEqual(str, type(bm_dict["updated_at"]))
-    """
+
     def test_to_dict_output(self):
         dt = datetime.today()
         bm = BaseModel()
@@ -177,7 +177,7 @@ class TestBaseModel_to_dict(unittest.TestCase):
             'updated_at': dt.isoformat()
         }
         self.assertDictEqual(bm.to_dict(), tdict)
-    """
+
     def test_contrast_to_dict_dunder_dict(self):
         bm = BaseModel()
         self.assertNotEqual(bm.to_dict(), bm.__dict__)

@@ -60,11 +60,6 @@ class HBNBCommand(cmd.Cmd):
             new_instance.save()
             print(new_instance.id)
 
-           # new_instance = eval(args.split()[0] + '()')
-           # if isinstance(new_instance, BaseModel):
-           #     new_instance.save()
-           #     print(new_instance.id)
-
     def do_show(self, args):
         """Prints str representation of instance based on class name and id"""
         if not args:
