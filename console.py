@@ -121,11 +121,11 @@ class HBNBCommand(cmd.Cmd):
         """Prints all string representation of all instances"""
         storage.reload()
         instances = storage.all()
-        
+
         if not args or args.lower() == 'basemodel':
             result = [instance.__str__() for instance in instances.values()]
             print(result)
-        
+
         elif args.split()[0] in HBNBCommand.clsz:
             result = [
                 instance.__str__()
