@@ -121,7 +121,9 @@ class HBNBCommand(cmd.Cmd):
             print(result)
         elif args.lower() in HBNBCommand.clsz:
             result = [
-                instance.__str__() for key, instance in instances.items() if key.split('.')[0] == args.lower()
+                instance.__str__()
+                for key, instance in instances.items()
+                if key.split('.')[0] == args.lower()
             ]
             print(result)
         else:
