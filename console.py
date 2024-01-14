@@ -52,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
         """Creates a new instance of BaseModel, saves it and prints the id"""
         if not args:
             print('** class name missing **')
-        elif args not in self.clsz:
+        elif args not in HBNBCommand.clsz:
             print("** class doesn't exist **")
         else:
             new_instance = globals()[args]()
