@@ -76,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             class_name, instance_id = args.split()[0], args.split()[1]
             key = "{}.{}".format(class_name, instance_id)
-            instances = storage.all()
+            instances = storage.all(class_name)
 
             if key not in instances:
                 print('** no instance found **')
@@ -93,8 +93,8 @@ class HBNBCommand(cmd.Cmd):
             print('** instance id missing **')
         else:
             class_name, instance_id = args.split()[0], args.split()[1]
-            key = "{}.{}".format(args.split()[0], args.split()[1])
-            instances = storage.all()
+            key = "{}.{}".format(class_name, instance_id)
+            instances = storage.all(class_name)
 
             if key not in instances:
                 print('** no instance found **')
@@ -129,8 +129,8 @@ class HBNBCommand(cmd.Cmd):
         elif args.split()[0] in HBNBCommand.clsz:
             result = [
                 instance.__str__()
-                for key, instance in instances.items()
-                if key.split('.')[0] == args.lower()
+                for key, instance in storage.all(args.split()[0]).items()
+                # if key.split('.')[0] == args.lower()
             ]
             print(result)
         else:
@@ -148,7 +148,7 @@ class HBNBCommand(cmd.Cmd):
                 print('** instance id missing **')
             else:
                 key = "{}.{}".format(split(args)[0], split(args)[1])
-                instances = storage.all()
+                instances = storage.all(split(args)[0])
                 if key not in instances:
                     print('** no instance found **')
                 elif len(split(args)) < 3:
@@ -161,12 +161,37 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, args):
         '''Retrieve number of class instances'''
-        if not args or args not in self.clsz:
+        if not args or args[0] not in HBNBCommand.clsz:
             print("** class name missing **")
             return
-        instances = storage.att(args)
+        instances = storage.all(args[0])
         print(len(instances))
 
+    def do_update_dict(self, args):
+        '''Update instance and class'''
+        if not args:
+            print('** class name missing **')
+        elif args.split()[0] not in self.clsz:
+            print("** class doesn't exist **")
+        elif len(args.split()) < 2:
+            print('** instance id missing **')
+        elif len(args.split()) < 3:
+            print('** dictionary missing **')
+        else:
+            class_name, instance_id = args.split()[0].split()[1]
+            key = "{}.{}".format(class_name, instance_id)
+            instances = storage.all(class_name)
+
+            if key not in instances:
+                print('** no instance found **')
+            else:
+                try:
+                    dict_attribute = eval(args.split()[2])
+                    for key, value in dict_attribute.items():
+                        setattr(instances[key], key, valye)
+                    instances[key].save()
+                except Exception as e:
+                    print('** invalid dictionary format **')
 
 # HBNBCommand().cmdloop()
 
