@@ -4,9 +4,6 @@ footer {
     width: 100%;
     border-top: 1px solid #CCCCCC;
     position: absolute;
-    bottom: 0;
-}
-
-footer p {
     text-align: center;
+    line-height:60px;
 }
